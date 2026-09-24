@@ -82,9 +82,13 @@ input,select{width:100%;border:1px solid var(--border);background:white;border-r
 .bottom-nav{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:0;width:min(780px,100%);height:72px;background:white;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom)}
 .nav-item{border:0;background:white;color:#74817d;font-size:.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.nav-item span{font-size:1.2rem}.nav-item.active{color:var(--primary)}
 .row{display:flex;gap:10px;align-items:center}.row-between{display:flex;justify-content:space-between;gap:10px;align-items:center}.hidden{display:none!important}
-.onboarding{position:fixed;inset:0;z-index:100;background:linear-gradient(145deg,#075747,#164e63);display:grid;place-items:center;padding:20px}
-.onboard-card{width:min(460px,100%);background:white;border-radius:28px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.onboard-logo{text-align:center;font-size:3rem}.onboard-card h1{text-align:center;margin:5px 0}.onboard-card>p{text-align:center;color:var(--muted);line-height:1.5}
-.choice{border:1px solid var(--border);border-radius:16px;padding:13px;margin:9px 0;display:flex;gap:11px;align-items:center;background:#fff;text-align:start;width:100%}.choice.active{border:2px solid var(--primary);background:var(--primary-soft)}.choice strong{display:block}.choice small{color:var(--muted)}
+.onboarding{position:fixed;inset:0;z-index:100;background:linear-gradient(145deg,#075747,#164e63);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom))}
+.onboard-card{width:min(460px,100%);background:white;border-radius:28px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.25);margin:0 auto;min-height:min-content}.onboard-logo{text-align:center;font-size:2.5rem;line-height:1}.onboard-card h1{text-align:center;margin:6px 0 3px;font-size:1.55rem}.onboard-card>p{text-align:center;color:var(--muted);line-height:1.45;margin:5px 0 12px}
+.onboard-progress{display:flex;align-items:center;justify-content:center;gap:7px;margin:8px 0 15px}.onboard-progress span{width:9px;height:9px;border-radius:50%;background:#d7dfdc}.onboard-progress span.active{width:26px;border-radius:999px;background:var(--primary)}.onboard-progress small{color:var(--muted);font-weight:850;margin-inline-start:4px}
+.onboard-step-head{display:flex;align-items:center;gap:9px;margin:7px 0 10px}.onboard-step-head h3{margin:0;font-size:1.02rem}.onboard-back{border:0;background:#f1f5f4;color:var(--primary);width:38px;height:38px;border-radius:12px;font-weight:950;flex:none}.onboard-note{font-size:.8rem;color:var(--muted);line-height:1.45;margin:0 0 10px}
+.choice{border:1px solid var(--border);border-radius:16px;padding:12px;margin:8px 0;display:flex;gap:11px;align-items:center;background:#fff;text-align:start;width:100%}.choice.active{border:2px solid var(--primary);background:var(--primary-soft)}.choice strong{display:block}.choice small{color:var(--muted)}
+.onboard-start{position:sticky;bottom:0;z-index:3;margin-top:12px;box-shadow:0 -8px 18px rgba(255,255,255,.94),0 8px 20px rgba(11,107,88,.22)}
+@media(max-width:520px){.onboarding{padding:10px 10px max(14px,env(safe-area-inset-bottom))}.onboard-card{padding:15px;border-radius:22px}.onboard-logo{font-size:2rem}.onboard-card h1{font-size:1.32rem}.onboard-card>p{font-size:.82rem;margin-bottom:8px}.onboard-progress{margin:5px 0 11px}.choice{padding:10px 11px;margin:7px 0;border-radius:14px}.choice strong{font-size:.94rem}.choice small{font-size:.76rem}.track-picker{gap:7px}.track-card{grid-template-columns:44px 1fr auto;padding:9px 10px;border-radius:14px}.track-icon{width:44px;height:44px;font-size:1.4rem}.track-card h4{font-size:.9rem}.track-card p{font-size:.7rem}.onboard-step-head{margin:4px 0 7px}}
 .role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.role-tabs button{border:1px solid var(--border);border-radius:13px;padding:11px;background:#fff;font-weight:850}.role-tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 [dir="ltr"] .action-card,[dir="ltr"] .answer{text-align:left}
 [dir="rtl"] .action-card,[dir="rtl"] .answer{text-align:right}
@@ -290,7 +294,7 @@ body:has(.game-shell) .sim-fab{display:none}
         <div class="logo-mini">🚗</div>
         <div>
           <div class="brand" id="brandText">Ready2Drive</div>
-          <div class="subtitle"><span class="lb-pill">🇱🇧 لبنان</span> <span class="build-pill">V8.3.3</span> <span id="subtitle">استعد للامتحان النظري والعملي</span></div>
+          <div class="subtitle"><span class="lb-pill">🇱🇧 لبنان</span> <span class="build-pill">V8.3.4</span> <span id="subtitle">استعد للامتحان النظري والعملي</span></div>
         </div>
       </div>
       <button id="langBtn" class="icon-btn" aria-label="Language">EN</button>
@@ -1130,12 +1134,38 @@ ${journeyStep("issuance","9",tx("issuanceStep"),tx("issuanceStepText"),`<div cla
 function sources(){return `<div class="section-title"><h2>📚 ${tx("sources")}</h2></div><div class="alert">${tx("sourceNote")}</div><br>${Object.entries(D.sources).filter(([k,v])=>v.url).map(([k,v])=>`<div class="card source-card"><h3>${label(v.short)}</h3><small>${v.url}</small><br><br><a href="${v.url}" target="_blank" rel="noopener">${tx("openSource")} ↗</a></div>`).join("")}`}
 function mock(){startQuiz("all",30,true)}
 function render(){if(state.practiceSession){app.innerHTML=practiceSessionView();return}if(state.quiz){app.innerHTML=quizView();return}if(state.signQuiz){app.innerHTML=signQuizView();return}const map={home,learn,signs,practice,progress,profile,practical,circuit:practicalCircuit,sim:()=>{setTimeout(()=>startCircuitDrill(5,"practice"),0);return `<div class="card center">🎮 ${state.lang==="ar"?"فتح محاكي الركن الجديد...":"Opening new parking simulator..."}</div>`},garage:()=>{setTimeout(()=>startCircuitDrill(2,"practice"),0);return `<div class="card center">🎮 ${state.lang==="ar"?"فتح محاكي الركن الجديد...":"Opening new parking simulator..."}</div>`},hill:hillSim,passenger:passengerSim,smooth:smoothSim,moto:motoSim,preride:preRideSim,motolane:motoLaneSim,sources,mock,examcenter:examCenter,journey:licenseJourney};app.innerHTML=(map[state.route]||home)()}
+let onboardingStep=1;
+function chooseOnboardLang(l){
+ state.lang=l;save();applyLang();render();onboardingStep=2;renderOnboarding();
+}
+function chooseOnboardRole(r){
+ state.role=r;save();state.route="home";render();onboardingStep=3;renderOnboarding();
+}
+function onboardingBack(){
+ if(onboardingStep>1){onboardingStep--;renderOnboarding()}
+}
 function renderOnboarding(){
  if(state.onboarded){onboard.classList.add("hidden");return}
- onboard.classList.remove("hidden");onboard.innerHTML=`<div class="onboard-card"><div class="onboard-logo">🚗🇱🇧</div><h1>${tx("onboardTitle")}</h1><p>${tx("onboardText")}</p><h3>${tx("chooseLang")}</h3>
- <button class="choice ${state.lang==="ar"?"active":""}" onclick="setLang('ar')"><span style="font-size:1.5rem">ع</span><div><strong>العربية</strong><small>واجهة كاملة</small></div></button><button class="choice ${state.lang==="en"?"active":""}" onclick="setLang('en')"><span style="font-size:1.4rem">EN</span><div><strong>English</strong><small>Full interface</small></div></button>
- <h3>${tx("chooseRole")}</h3><button class="choice ${state.role==="student"?"active":""}" onclick="state.role='student';save();renderOnboarding()"><span style="font-size:1.5rem">👤</span><div><strong>${tx("student")}</strong><small>${tx("studentDesc")}</small></div></button><button class="choice ${state.role==="school"?"active":""}" onclick="state.role='school';save();renderOnboarding()"><span style="font-size:1.5rem">🏫</span><div><strong>${tx("school")}</strong><small>${tx("schoolDesc")}</small></div></button>
- <h3>${tx("chooseTrack")}</h3>${trackSelector()}<button class="primary-btn full" ${(!state.role||!state.track)?"disabled":""} onclick="finishOnboarding()">${tx("continue")} ←</button></div>`;
+ onboard.classList.remove("hidden");
+ const progress=`<div class="onboard-progress"><span class="${onboardingStep===1?"active":""}"></span><span class="${onboardingStep===2?"active":""}"></span><span class="${onboardingStep===3?"active":""}"></span><small>${onboardingStep}/3</small></div>`;
+ let body="";
+ if(onboardingStep===1){
+   body=`<div class="onboard-step-head"><h3>${tx("chooseLang")}</h3></div>
+   <p class="onboard-note">${state.lang==="ar"?"يمكنك تغيير اللغة لاحقاً من أعلى التطبيق.":"You can change the language later from the top of the app."}</p>
+   <button class="choice ${state.lang==="ar"?"active":""}" onclick="chooseOnboardLang('ar')"><span style="font-size:1.5rem">ع</span><div><strong>العربية</strong><small>واجهة كاملة</small></div></button>
+   <button class="choice ${state.lang==="en"?"active":""}" onclick="chooseOnboardLang('en')"><span style="font-size:1.35rem">EN</span><div><strong>English</strong><small>Full interface</small></div></button>`;
+ }else if(onboardingStep===2){
+   body=`<div class="onboard-step-head"><button class="onboard-back" onclick="onboardingBack()">←</button><h3>${tx("chooseRole")}</h3></div>
+   <button class="choice ${state.role==="student"?"active":""}" onclick="chooseOnboardRole('student')"><span style="font-size:1.45rem">👤</span><div><strong>${tx("student")}</strong><small>${tx("studentDesc")}</small></div></button>
+   <button class="choice ${state.role==="school"?"active":""}" onclick="chooseOnboardRole('school')"><span style="font-size:1.45rem">🏫</span><div><strong>${tx("school")}</strong><small>${tx("schoolDesc")}</small></div></button>`;
+ }else{
+   body=`<div class="onboard-step-head"><button class="onboard-back" onclick="onboardingBack()">←</button><h3>${tx("chooseTrack")}</h3></div>
+   <p class="onboard-note">${state.lang==="ar"?"اختر فئة الرخصة التي تريد التحضير لها.":"Choose the licence category you want to prepare for."}</p>
+   ${trackSelector()}
+   <button class="primary-btn full onboard-start" ${!state.track?"disabled":""} onclick="finishOnboarding()">${state.lang==="ar"?"ابدأ Ready2Drive":"Start Ready2Drive"} ←</button>`;
+ }
+ onboard.innerHTML=`<div class="onboard-card"><div class="onboard-logo">🇱🇧 🚗</div><h1>${tx("onboardTitle")}</h1><p>${tx("onboardText")}</p>${progress}${body}</div>`;
+ onboard.scrollTop=0;
 }
 function finishOnboarding(){if(!state.role||!state.track)return;state.onboarded=true;save();onboard.classList.add("hidden");render()}
 document.getElementById("langBtn").onclick=()=>setLang(state.lang==="ar"?"en":"ar");
